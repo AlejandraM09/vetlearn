@@ -1,5 +1,5 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Role } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -19,7 +19,7 @@ async function main() {
       name: 'Alejandra Montoya',
       email: 'amontoya@vetlearn.co',
       password: hashedAlejandra,
-      role: 'ADMIN',
+      role: Role.ADMIN,
       xp: 650,
       level: 3,
     },
@@ -33,7 +33,7 @@ async function main() {
       name: 'Natalia Montoya M',
       email: 'montonaty@vetlearn.co',
       password: hashedNatalia,
-      role: 'STUDENT',
+      role: Role.STUDENT,
       xp: 120,
       level: 1,
     },
