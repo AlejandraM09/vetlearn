@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String      @id @default(cuid())
+  email      String      @unique
+  name       String?
+  createdAt  DateTime    @default(now())
+  progress   Progress[]
+  favorites  Favorite[]
+  achievements Achievement[]
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  category    String
+  lessons     Int
+  createdAt   DateTime @default(now())
+  quizzes     Quiz[]
+  progress    Progress[]
+}
+
+model Species {
+  id              String       @id @default(cuid())
+  name            String
+  slug            String       @unique
+  reference       String
+  temperature     String
+  heartRate       String
+  respiratoryRate String
+  weightRange     String?
+  notes           String?
+  favorites       Favorite[]
+}
+
+model Quiz {
+  id        String   @id @default(cuid())
+  module    Module   @relation(fields: [moduleId], references: [id])
+  moduleId  String
+  question  String
+  options   Json
+  answer    String
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  module    Module   @relation(fields: [moduleId], references: [id])
+  moduleId  String
+  completed Boolean  @default(false)
+  score     Int?
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  species   Species  @relation(fields: [speciesId], references: [id])
+  speciesId String
+}
+
+model Achievement {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  title     String
+  earnedAt  DateTime @default(now())
+}
+
+model CaseStudy {
+  id        String        @id @default(cuid())
+  slug      String        @unique
+  title     String
+  category  String
+  summary   String
+  scenario  String
+  decisions CaseDecision[]
+}
+
+model CaseDecision {
+  id          String    @id @default(cuid())
+  caseStudy   CaseStudy @relation(fields: [caseStudyId], references: [id])
+  caseStudyId String
+  label       String
+  description String
+  feedback    String
+  correct     Boolean   @default(false)
+}
