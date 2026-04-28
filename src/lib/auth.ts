@@ -66,7 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token) {
         session.user.id       = token.id as string
         session.user.username = token.username as string
-        session.user.role     = token.role as string
+        session.user.role = token.role as 'ADMIN' | 'STUDENT'
         session.user.xp       = token.xp as number
         session.user.level    = token.level as number
       }
